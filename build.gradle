@@ -55,6 +55,17 @@ minecraft {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets {
+    gametest {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+    }
+}
+minecraft.runs.gameTestServer {
+    workingDirectory project.file('run-gametest')
+    mods { "${mod_id}" { source sourceSets.gametest } }
+}
+tasks.named('check') { dependsOn tasks.named('compileGametestJava') }
 
 
 repositories {

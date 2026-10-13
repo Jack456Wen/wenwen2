@@ -1,9 +1,19 @@
-# 是否启用。只影响逻辑服务端。
+# 是否启用全部距离优化。
 enabled = true
-# 是否减少已冻结实体的距离检查频率。默认关闭；开启后玩家靠近可能延迟恢复。
-delayFrozenChecks = false
-# 开启上项后生效：距离检查间隔，1～200 tick。默认 10，正常 20 TPS 下约 0.5 秒。
-frozenCheckInterval = 10
+# 客户端隐藏范围外实体；保留玩家、白名单与受保护实体。
+hideDistantEntities = true
+# 客户端暂停范围外实体 tick；收到标准移动/传送包时仍更新位置。
+freezeClientEntities = true
+# 禁止冻结实体间推挤。默认关闭；不影响方块碰撞和攻击命中。
+disableFrozenPushing = false
+# 只限制范围外 NATURAL 自然刷怪；默认关闭，会影响农场。
+limitNaturalSpawns = false
+# 冻结时保留非持久化生物的空闲计时，自然消失仍由原版/Forge 判断。
+maintainNaturalDespawn = true
+# 是否减少已冻结实体的距离检查频率。默认开启；靠近时可能延迟恢复。
+delayFrozenChecks = true
+# 开启上项后生效：距离检查间隔，1～200 tick。默认 5，正常 20 TPS 下约 0.25 秒。
+frozenCheckInterval = 5
 # SPHERE：三维球形，保持原有行为；CYLINDER：水平半径与垂直高度差分别限制。
 distanceMode = "SPHERE"
 # 仅 CYLINDER 模式使用，单位：方块。须对同一玩家满足水平与垂直条件。

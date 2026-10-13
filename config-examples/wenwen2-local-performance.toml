@@ -1,0 +1,40 @@
+# 本地性能预设：开启全部优化。自然刷怪限制和推挤限制会改变玩法。
+# 是否启用全部距离优化。
+enabled = true
+# 客户端隐藏范围外实体；保留玩家、白名单与受保护实体。
+hideDistantEntities = true
+# 客户端暂停范围外实体 tick；收到标准移动/传送包时仍更新位置。
+freezeClientEntities = true
+# 禁止冻结实体间推挤。此预设开启；模组默认关闭。不影响方块碰撞和攻击命中。
+disableFrozenPushing = true
+# 只限制范围外 NATURAL 自然刷怪；此预设开启，模组默认关闭，会影响农场。
+limitNaturalSpawns = true
+# 冻结时保留非持久化生物的空闲计时，自然消失仍由原版/Forge 判断。
+maintainNaturalDespawn = true
+# 是否减少已冻结实体的距离检查频率。默认开启；靠近时可能延迟恢复。
+delayFrozenChecks = true
+# 开启上项后生效：距离检查间隔，1～200 tick。默认 5，正常 20 TPS 下约 0.25 秒。
+frozenCheckInterval = 5
+# SPHERE：三维球形，保持原有行为；CYLINDER：水平半径与垂直高度差分别限制。
+distanceMode = "SPHERE"
+# 仅 CYLINDER 模式使用，单位：方块。须对同一玩家满足水平与垂直条件。
+horizontalDistance = 64.0
+verticalDistance = 32.0
+# 死亡中的生物继续 tick，确保死亡动画和实体清理完成。
+protectDying = true
+# 同维度最近非旁观玩家的三维距离，单位：方块。边界内正常 tick。
+activationDistance = 64.0
+# ALL_NON_PLAYERS：所有非玩家实体；MOBS_ONLY：只处理 Mob 生物。
+scope = "ALL_NON_PLAYERS"
+# 保护不能切换维度的实体（包含原版 Boss）。模组 Boss 建议另加白名单。
+protectBosses = true
+# 命名实体是否始终 tick。
+protectNamed = false
+# 驯服的动物、马是否始终 tick。
+protectTamed = true
+# 维度没有非旁观玩家时是否冻结符合条件的实体。
+freezeWithoutPlayers = true
+# 实体 ID、模组通配符和实体类型标签。例如 "create:*"、"#minecraft:raiders"。
+whitelist = ["minecraft:ender_dragon", "minecraft:wither"]
+
+

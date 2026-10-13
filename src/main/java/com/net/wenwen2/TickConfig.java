@@ -13,18 +13,35 @@ public final class TickConfig {
     public static final ForgeConfigSpec.BooleanValue PROTECT_DYING;
     public static final ForgeConfigSpec.BooleanValue DELAY_FROZEN_CHECKS;
     public static final ForgeConfigSpec.IntValue FROZEN_CHECK_INTERVAL;
+    public static final ForgeConfigSpec.BooleanValue HIDE_DISTANT_ENTITIES, FREEZE_CLIENT_ENTITIES;
+    public static final ForgeConfigSpec.BooleanValue DISABLE_FROZEN_PUSHING, LIMIT_NATURAL_SPAWNS, MAINTAIN_NATURAL_DESPAWN;
     public static final ForgeConfigSpec.EnumValue<Scope> SCOPE;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELIST;
     static {
         ForgeConfigSpec.Builder b = new ForgeConfigSpec.Builder();
-        ENABLED = b.comment("是否启用服务端实体距离停 tick 功能。关闭后所有实体按原有逻辑运行。").define("enabled", true);
-        DELAY_FROZEN_CHECKS = b.comment("是否减少已冻结实体的距离检查频率。默认关闭，关闭时每 tick 检查并立即恢复。",
+        ENABLED = b.comment("是否启用距离优化。关闭后停 tick、隐藏、推挤限制和自然刷怪限制全部停用。").define("enabled", true);
+        HIDE_DISTANT_ENTITIES = b.comment("客户端是否隐藏距离外的实体，包括模型、阴影、名称和火焰绘制。",
+            "使用与服务端 tick 相同的距离参数；玩家、白名单和受保护实体仍显示。声音和独立粒子不受此项控制。")
+            .define("hideDistantEntities", true);
+        FREEZE_CLIENT_ENTITIES = b.comment("客户端是否暂停距离外实体的 tick，减少本地动画和更新开销。",
+            "恢复时重置插值起点；网络同步仍正常接收。模组实体若恢复异常可单独关闭此项。")
+            .define("freezeClientEntities", true);
+        DISABLE_FROZEN_PUSHING = b.comment("是否禁止被冻结实体参与实体间推挤。默认关闭；开启可能改变运输和实体重叠行为。",
+            "不设置 noPhysics，不改变方块碰撞、攻击命中和弹射物命中。模组自定义推挤逻辑可能不受此项控制。")
+            .define("disableFrozenPushing", false);
+        LIMIT_NATURAL_SPAWNS = b.comment("是否阻止距离外的自然刷怪。默认关闭，会改变刷怪分布及农场效率。",
+            "只拦截 NATURAL，不拦截区块生成、存档加载、刷怪笼、繁殖、指令和物品生成；白名单及保护条件仍有效。")
+            .define("limitNaturalSpawns", false);
+        MAINTAIN_NATURAL_DESPAWN = b.comment("冻结时是否继续增加非持久化、启用 AI 生物的空闲计时。默认开启。",
+            "自然消失仍交给原版和 Forge 在实体 tick 前的检查，不额外强制删除实体。")
+            .define("maintainNaturalDespawn", true);
+        DELAY_FROZEN_CHECKS = b.comment("是否减少已冻结实体的距离检查频率。默认开启，关闭时每 tick 检查并立即恢复。",
             "开启后，玩家靠近时可能延迟最多 frozenCheckInterval 个服务端 tick 恢复。",
             "死亡、骑乘、传送和其他保护条件仍每 tick 检查；配置或标签重载后立即重新判断。")
-            .define("delayFrozenChecks", false);
+            .define("delayFrozenChecks", true);
         FROZEN_CHECK_INTERVAL = b.comment("仅 delayFrozenChecks 开启时使用：已冻结实体重新检查距离的间隔。",
-            "默认 10 tick；正常 20 TPS 下约 0.5 秒。正常运行的实体仍每 tick 检查。")
-            .defineInRange("frozenCheckInterval", 10, 1, 200);
+            "默认 5 tick；正常 20 TPS 下约 0.25 秒。正常运行的实体仍每 tick 检查。")
+            .defineInRange("frozenCheckInterval", 5, 1, 200);
         DISTANCE_MODE = b.comment("距离模式：SPHERE 为三维球形，使用 activationDistance，默认保持原有行为。",
             "CYLINDER 为圆柱形，同时检查水平半径和垂直高度差；必须对同一位玩家满足两个条件。")
             .defineEnum("distanceMode", DistanceMode.SPHERE);
@@ -63,7 +80,7 @@ public final class TickConfig {
     private static boolean validEntry(Object value) {
         if (!(value instanceof String s) || s.isBlank()) return false;
         if (s.startsWith("#")) return ResourceLocation.tryParse(s.substring(1)) != null;
-        if (s.endsWith(":*")) return ResourceLocation.tryParse(s.substring(0, s.length()-1) + "placeholder") != null;
+        if (s.endsWith(":*")) return s.length() > 2 && ResourceLocation.tryParse(s.substring(0, s.length()-1) + "placeholder") != null;
         return s.contains(":") && ResourceLocation.tryParse(s) != null;
     }
     private TickConfig() {}
