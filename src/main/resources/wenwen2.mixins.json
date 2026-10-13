@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.net.wenwen2.mixin",
+  "refmap": "wenwen2.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ServerLevelMixin",
+    "EntityPortalAccessor"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
