@@ -11,6 +11,7 @@ public final class TickConfig {
     public static final ForgeConfigSpec.DoubleValue HORIZONTAL_DISTANCE, VERTICAL_DISTANCE;
     public static final ForgeConfigSpec.EnumValue<DistanceMode> DISTANCE_MODE;
     public static final ForgeConfigSpec.BooleanValue PROTECT_DYING;
+    public static final ForgeConfigSpec.BooleanValue PROTECT_PROJECTILES;
     public static final ForgeConfigSpec.BooleanValue DELAY_FROZEN_CHECKS;
     public static final ForgeConfigSpec.IntValue FROZEN_CHECK_INTERVAL;
     public static final ForgeConfigSpec.BooleanValue HIDE_DISTANT_ENTITIES, FREEZE_CLIENT_ENTITIES;
@@ -54,6 +55,10 @@ public final class TickConfig {
             .defineInRange("verticalDistance", 32.0, 1.0, 32768.0);
         PROTECT_DYING = b.comment("是否让死亡过程中的生物继续 tick，确保死亡动画和实体清理完成。建议开启。")
             .define("protectDying", true);
+        PROTECT_PROJECTILES = b.comment("是否让弹射物始终正常 tick 并保留显示，避免远处箭、火球、投掷物等卡在空中。默认开启。",
+            "同时保护客户端和服务端；包括继承原版 Projectile 的模组弹射物。未继承此类的模组弹射物请加入白名单。",
+            "不强制加载区块；离开原版实体模拟/网络追踪范围时，仍遵循原版规则。")
+            .define("protectProjectiles", true);
         SCOPE = b.comment("停 tick 的实体范围。",
             "ALL_NON_PLAYERS：所有非玩家实体，包括生物、掉落物、弹射物、矿车和模组实体。",
             "MOBS_ONLY：只处理 Mob 类生物。玩家始终不受影响。")

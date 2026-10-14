@@ -11,6 +11,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public final class TickPolicy {
@@ -18,7 +19,8 @@ public final class TickPolicy {
                             boolean protectNamed, boolean protectTamed, boolean freezeWithoutPlayers,
                             boolean cylinder, double radiusSquared, double vertical,
                             boolean delayChecks, int interval, boolean hideDistant, boolean freezeClient,
-                            boolean disablePush, boolean limitSpawns, boolean maintainDespawn) {}
+                            boolean disablePush, boolean limitSpawns, boolean maintainDespawn,
+                            boolean protectProjectiles) {}
     private record Whitelist(Set<ResourceLocation> ids, Set<String> namespaces, List<TagKey<EntityType<?>>> tags) {}
     private static final class Snapshot {
         final Settings settings;
@@ -176,6 +178,7 @@ public final class TickPolicy {
 
     private static boolean protectedEntity(Entity entity, Settings s) {
         if (entity instanceof Player || entity.isRemoved()) return true;
+        if (s.protectProjectiles() && entity instanceof Projectile) return true;
         if (s.protectDying() && entity instanceof LivingEntity living && living.isDeadOrDying()) return true;
         if (entity.isPassenger() || entity.isVehicle() || entity.isOnPortalCooldown()
             || ((EntityPortalAccessor) entity).wenwen2$isInsidePortal()) return true;
@@ -197,7 +200,7 @@ public final class TickPolicy {
             TickConfig.DELAY_FROZEN_CHECKS.get(), TickConfig.FROZEN_CHECK_INTERVAL.get(),
             TickConfig.HIDE_DISTANT_ENTITIES.get(), TickConfig.FREEZE_CLIENT_ENTITIES.get(),
             TickConfig.DISABLE_FROZEN_PUSHING.get(), TickConfig.LIMIT_NATURAL_SPAWNS.get(),
-            TickConfig.MAINTAIN_NATURAL_DESPAWN.get());
+            TickConfig.MAINTAIN_NATURAL_DESPAWN.get(), TickConfig.PROTECT_PROJECTILES.get());
         Set<ResourceLocation> ids = new HashSet<>();
         Set<String> namespaces = new HashSet<>();
         List<TagKey<EntityType<?>>> tags = new ArrayList<>();

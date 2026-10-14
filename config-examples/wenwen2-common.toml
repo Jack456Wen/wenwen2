@@ -21,6 +21,8 @@ horizontalDistance = 64.0
 verticalDistance = 32.0
 # 死亡中的生物继续 tick，确保死亡动画和实体清理完成。
 protectDying = true
+# 弹射物保留服务端/客户端 tick 和显示，避免卡在空中；模组弹射物需继承 Projectile，否则加入白名单。
+protectProjectiles = true
 # 同维度最近非旁观玩家的三维距离，单位：方块。边界内正常 tick。
 activationDistance = 64.0
 # ALL_NON_PLAYERS：所有非玩家实体；MOBS_ONLY：只处理 Mob 生物。
